@@ -30,7 +30,6 @@ reference_data = {
 start_row = 9  
 truck_column = "C"
 
-# Fungsi untuk mengekstrak angka dari teks
 def extract_numbers(text):
     if text:
         numbers = re.findall(r"\d+", str(text))
@@ -38,32 +37,25 @@ def extract_numbers(text):
     return None
 
 def process_excel():
-    # Membuka file Excel
     wb = load_workbook("20250320.xlsx")
 
     truck_data = {}
 
-    # Iterasi melalui sheet yang dipilih
     for sheet_name, meter_key in sheet_mapping.items():
         if sheet_name in wb.sheetnames:
             sheet = wb[sheet_name]
 
-            # Ambil angka dari kolom C, mulai dari baris 9 ke bawah
             truck_numbers = [
                 extract_numbers(sheet[f"{truck_column}{row}"].value)
                 for row in range(start_row, sheet.max_row + 1)
                 if sheet[f"{truck_column}{row}"].value is not None
             ]
 
-            # Filter agar tidak ada nilai None
             truck_numbers = [num for num in truck_numbers if num]
 
-            # Simpan hasil dengan key yang sesuai
             truck_data[meter_key] = truck_numbers
 
-    # Dictionary untuk menyimpan hasil perbandingan
     comparison_result = {}
-    # Perbandingan data
     for meter, trucks in reference_data.items():
         excel_trucks = set(truck_data.get(meter, []))  # Data dari Excel (set untuk efisiensi pencarian)
         reference_trucks = set(trucks)  # Data referensi
