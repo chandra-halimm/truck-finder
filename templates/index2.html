@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hasil Perbandingan Data Truk</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        padding: 20px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+      }
+      th,
+      td {
+        border: 1px solid black;
+        padding: 8px;
+        text-align: center;
+      }
+      th {
+        background-color: #f4f4f4;
+      }
+      .missing {
+        color: red;
+      }
+      .additional {
+        color: green;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Hasil Perbandingan Data Truk</h2>
+
+    <table>
+      <tr>
+        <th>Meter</th>
+        <th>Truk Hilang (Missing)</th>
+        <th>Truk Tambahan (Additional)</th>
+      </tr>
+      {% for meter, result in comparison_result.items() %}
+      <tr>
+        <td>{{ meter }}</td>
+        <td class="missing">
+          {{ ', '.join(result.missing) if result.missing else '-' }}
+        </td>
+        <td class="additional">
+          {{ ', '.join(result.additional) if result.additional else '-' }}
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+
+    <h3>Truk yang Berpindah Meter</h3>
+    <ul>
+      {% for message in missing_found_elsewhere %}
+      <li>{{ message }}</li>
+      {% else %}
+      <li>Tidak ada truk yang berpindah meter.</li>
+      {% endfor %}
+    </ul>
+  </body>
+</html>
